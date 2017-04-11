@@ -67,4 +67,39 @@ var values = [25, "hi", true];
 
 객체와 배열은 일반적으로 JSON 데이터 구조에서 최상위 레벨에 있으며 이들을 조합하여 다양한 데이터 구조를 만들 수 있다.
 
-### 파싱과 직력화
+### 20.2 파싱과 직렬화
+- 친근한 문법
+- JSON 데이터를 파싱하면 바로 사용할 수 있는 자바스크립트 객체가 된다.
+
+## 20.2.1 JSON 객체
+JSON 객체에는 stringify()와 parse() 두 가지 메서드가 있다.
+이들 메서드는 각각 자바스크립트 객체를 JSON 문자열로 직렬화하며, JSON을 파싱하여 네이티브 자바스크립트 값으로 바꾼다.
+```js
+//stringify()
+var book = {
+    title : "Professtional JavaScript",
+    authors : [
+        "Nicholas C. Zakas"
+    ],
+    edition : 3,
+    year : 2011
+};
+
+var jsonText = JSON.stringify(book);
+
+{"title":"Professtional JavaScript","authors":["Nicholas C. Zakas"],"edition":3,"year":2011}
+```
+JSON.stringify()가 직렬화한 JSON 문자열에는 공백이나 들여쓰기가 전혀 없다.
+- 자바스크립트 객체를 직렬화 할 때는 모든 함수와 프로토타입 멤버가 생략된다.(의도한 결과이다.)
+- 값이 undefined인 프로퍼티도 모두 생략한다.(JSON 데이터 타입으로 표현 가능한 인스턴스 프로퍼티만 남는다.)
+
+JSON 문자열을 JSON.parse()에 넘기면 적절한 자바스크립트 값이 생성된다.
+```js
+//parse()
+var bookCopy = JSON.parse(jsonText);
+
+Object {title: "Professtional JavaScript", authors: Array(1), edition: 3, year: 2011}
+```
+JSON.parse()에 전달한 텍스트가 유효한 JSON이 아닐 경우 에러가 발생한다.
+
+### 20.2.2 직렬화 옵션 (JSON.stringify())
