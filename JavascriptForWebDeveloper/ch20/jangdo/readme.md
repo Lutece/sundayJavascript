@@ -103,3 +103,113 @@ Object {title: "Professtional JavaScript", authors: Array(1), edition: 3, year: 
 JSON.parse()에 전달한 텍스트가 유효한 JSON이 아닐 경우 에러가 발생한다.
 
 ### 20.2.2 직렬화 옵션 (JSON.stringify())
+JSON.stringify() 메서드는 직렬화할 객체 외에 두 가지 매개변수를 더 받을 수 있다.
+1. 첫 번째 매개변수는 필터이다 (배열이나 함수를 쓸 수 있다.)
+2. 두 번째 JSON 문자열의 들여쓰기를 조절합니다.
+
+### 결과 필터링
+##### 첫 번째 매개변수
+```js
+var book = {
+    title : "Professtional JavaScript",
+    authors : [
+        "Nicholas C. Zakas"
+    ],
+    edition : 3,
+    year : 2011
+};
+
+var jsonText = JSON.stringify(book, ["title", "edition"]);
+
+{"title":"Professtional JavaScript","edition":3}
+```
+직렬화할 객체의 프로퍼티와 일치하는 프로퍼티만 JSON 문자열에 포함된다.
+
+##### 두 번째 매개변수
+- 두 번째 매개변수가 함수일 경우엔 조금 다르게 동작한다.
+- 콜백 함수는 자동으로 프로퍼티의 이름과 값을 매개변수로 받는다.
+- 키 이름에 따라 프로퍼티를 다르게 처리할 수 있다.
+- undefined가 반환되면 해당 프로퍼티는 생략된다.
+```js
+var book = {
+    title : "Professtional JavaScript",
+    authors : [
+        "Nicholas C. Zakas"
+    ],
+    edition : 3,
+    year : 2011
+};
+
+var jsonText = JSON.stringify(book, function(key, value){
+    switch(key){
+        case "authors" :
+            return value.join(",")
+        case "year" :
+            return 5000;
+        case "edition" :
+            return undefined;
+        default :
+            return value;
+    }
+});
+
+{"title":"Professtional JavaScript","authors":"Nicholas C. Zakas","year":5000}
+```
+이 함수는 키에 따라 다른 값을 반환한다.
+필터 함수를 만들 때는, 넘어온 값을 그대로 반환다는 기본 동작(default 절)을 넣는 것이 중요하다.
+
+### 문자열 들여쓰기
+- JSON.stringify()의 세 번째 매개변수는 들여쓰기와 공백을 컨트롤 한다.
+- 매개변수에 <code>숫자</code>를 넘기면 각 레벨마다 그만큼을 들여쓴다.
+```js
+var book = {
+    title : "Professtional JavaScript",
+    authors : [
+        "Nicholas C. Zakas"
+    ],
+    edition : 3,
+    year : 2011
+};
+
+var jsonText = JSON.stringify(book, null, 4);
+
+{
+    "title": "Professtional JavaScript",
+    "authors": [
+        "Nicholas C. Zakas"
+    ],
+    "edition": 3,
+    "year": 2011
+}
+```
+들여쓰기 최댓값은 <strong>10</strong>이며, 이보다 큰 값은 자동으로 10으로 바뀐다.
+
+### 20.2.3 파싱 옵션 (JSON.parse())
+JSON.parse() 메서드 역시 각 키-값 쌍에서 호출될 콜백 함수를 추가적인 매개변수로 받는다.
+```js
+var book = {
+    title : "Professtional JavaScript",
+    authors : [
+        "Nicholas C. Zakas"
+    ],
+    edition : 3,
+    year : 2011,
+    releaseDate : new Date(2017, 04, 1)
+};
+
+var jsonText = JSON.stringify(book);
+
+var bookCopy = JSON.parse(jsonText, function(key, value){
+    if ( key == "releaseDate") {
+        return new Date(value);
+    } else {
+        return value;
+    }
+});
+
+Object {title: "Professtional JavaScript", authors: Array(1), edition: 3, year: 2011, releaseDate: Mon May 01 2017 00:00:00 GMT+0900 (대한민국 표준시)}
+```
+
+## 요약
+- JSON은 복잡한 데이터 구조를 쉽게 표현하도록 디자인된 경량화된 데이터 형식이다.
+- 형식은 자바스크립트 문법희 부분집합을 이용하여 객체, 배열, 문자열, 숫자, 불리언, null을 표현한다.
