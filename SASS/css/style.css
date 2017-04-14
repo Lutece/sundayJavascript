@@ -1,0 +1,66 @@
+@charset "UTF-8";
+/* adcapsule soft 2017-3-15 */
+/* CSS 적용순서 : 아이디 > 태그와 클래스 > 클래스 > 태그 /*
+/* CSS 선택자 선언순서 : Type Selector, Layout Selector, Class Selector, Etc */
+/* ui-style CSS */
+.wrap { position: relative; width: 100%; height: 100%; }
+
+.wrap .aside_wrap { position: fixed; left: 0; top: 0; z-index: 10; width: 270px; height: 100%; background-color: #4d394b; }
+
+.wrap .aside_wrap .left_menu { position: absolute; left: 0; top: 0; width: 60px; height: 100%; padding: 30px 0; background-color: #261c25; }
+
+.wrap .aside_wrap .left_menu ul { padding: 10px; }
+
+.wrap .aside_wrap .left_menu ul li { position: relative; height: 40px; margin-top: 50px; }
+
+.wrap .aside_wrap .left_menu ul li:first-child { margin-top: 0; }
+
+.wrap .aside_wrap .left_menu ul li a { display: block; position: absolute; left: 0; top: 0; z-index: 11; width: 40px; height: 40px; background-color: #fff; border-radius: 5px; }
+
+.wrap .aside_wrap .left_menu ul li a:after { display: block; content: ""; clear: both; position: absolute; left: -4px; top: -4px; z-index: 10; width: 48px; height: 48px; background-color: #fff; transition: all .5s; opacity: 0; border-radius: 5px; }
+
+.wrap .aside_wrap .left_menu ul li:hover a:after { opacity: 0.3; }
+
+.wrap .aside_wrap .aside_menu { position: relative; padding: 10px 10px 10px 70px; }
+
+.wrap .aside_wrap .aside_menu h1 { margin-bottom: 10px; }
+
+.wrap .aside_wrap .aside_menu .nickName { margin-bottom: 10px; }
+
+.wrap .aside_wrap .aside_menu .nickName a { display: block; position: relative; padding-left: 15px; color: #999; }
+
+.wrap .aside_wrap .aside_menu .nickName a:before { display: block; content: ""; position: absolute; left: 0; top: 6px; width: 8px; height: 8px; background-color: #38978d; border-radius: 50%; }
+
+.wrap .aside_wrap .aside_menu .allThreads a { color: #a191a0; font-size: 20px; }
+
+h1 { color: #fff; font-size: 20px; }
+
+.inner { position: relative; }
+
+.inner .list { margin-top: 30px; }
+
+.inner .list dt { margin-bottom: 5px; }
+
+.inner .list dt a { color: #a191a0; font-size: 20px; }
+
+.inner .list dt:hover a { color: #fff; }
+
+.inner .list:first-child { margin-top: 0; }
+
+.inner .list dd { position: relative; padding-left: 15px; }
+
+.inner .list dd a { color: #a191a0; font-size: 18px; line-height: 30px; }
+
+.inner .list dd:hover a { color: #fff; }
+
+.inner .btn_more { display: block; position: absolute; right: 0; top: 8px; width: 20px; height: 20px; border: 2px solid #f3f3f3; box-sizing: border-box; border-radius: 50%; }
+
+.inner + .inner { margin-top: 30px; }
+
+.container .header_wrap { position: fixed; left: 0; top: 0; z-index: 9; width: 100%; height: 50px; background-color: #fff; border-bottom: 1px solid #999; }
+
+.container .header_wrap .header { padding: 0 10px; padding-left: 280px; }
+
+.container .header_wrap .header h2 { font-size: 18px; color: #000; font-weight: bold; }
+
+.content { position: relative; overflow-y: auto; padding: 60px 10px 0 280px; }
