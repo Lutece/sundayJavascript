@@ -247,3 +247,37 @@ console.log(factorial(5));    // (출력값 120)
 ### 1.3 객체와 객체지향 프로그래밍
 
 자바스크립트는 객체를 정의하고 사용할 수 있는 다양한 방법을 제공한다.
+```js
+//계좌 Checking 객체의 생성자 함수 예제
+function Checking( amount ) {
+    this.balance = amount;  //프로퍼티
+    this.deposit = deposit; //함수
+    this.withdraw = withdraw;   //함수
+    this.toString = toString;   //함수
+}
+
+function deposit( amount ){
+    this.balance += amount;
+}
+
+function withdraw( amount ){
+    if ( amount <= this.balance ){
+        this.balance -= amount;
+    }
+    if ( amount > this.balance ){
+        console.log('Insufficient funds');
+    }
+}
+
+function toString(){
+    return 'Balance: ' + this.balance;
+}
+
+var account = new Checking(500);
+account.deposit(1000);
+console.log(account.toString());    // (출력값 Balance: 1500)
+account.withdraw(750);
+console.log(account.toString());    // (출력값 Balance: 750)
+account.withdraw(800);              // (출력값 Insufficient funds)
+console.log(account.toString());    // (출력값 Balance: 750)
+```
