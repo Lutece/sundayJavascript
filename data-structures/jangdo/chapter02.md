@@ -207,5 +207,175 @@ var toStr = names.toString();
 
 console.log(joinStr);  // (출력값 David,Mike,Cynthia,Mike)
 console.log(toStr);  // (출력값 David,Mike,Cynthia,Mike)
-console.log(typeof names);
 ```
+
+#### 2.3.3 기존 배열을 이용해 새 배열 만들기
+
+concat() 함수, splice() 함수는 기존 배열을 이용해 새 배열을 만드는 함수다.  
+
+**concat() 함수**  
+두 개 이상의 배열을 합쳐 새 배열을 만든다.
+
+기존의 배열에 concat() 함수를 호출하면 인자로 또 다른 기존 배열을 제공한다.  
+그러면 인자로 제공된 배열이 원래 **concat() 함수를 호출한 배열 뒤로 추가** 된다.
+```js
+var cisDept = ["Mike", "Clayton", "Terrill", "Danny", "Jennifer"];
+var dmpDept = ["Raymond", "Cynthia", "Bryan"];
+var itDiv = cisDept.concat(dmpDept);
+
+console.log(itDiv);     // (출력값 ["Mike", "Clayton", "Terrill", "Danny", "Jennifer", "Raymond", "Cynthia", "Bryan"])
+
+itDiv = dmpDept.concat(cisDept);
+
+console.log(itDiv);     // (출력값 ["Raymond", "Cynthia", "Bryan", "Mike", "Clayton", "Terrill", "Danny", "Jennifer"])
+```
+
+**splice() 함수**  
+기존 배열의 서브셋으로 새 배열을 만든다.  
+
+splice() 함수는 사용할 첫 요소의 위치, 기존 배열에서 사용할 요소의 수를 인자로 받는다.
+```js
+var itDiv = ["Mike", "Clayton", "Terrill", "Danny", "Jennifer"];
+var dmpDept = itDiv.splice(3, 2);
+var cisDept = itDiv;
+
+console.log(dmpDept);   // (출력값 ["Danny", "Jennifer"])
+console.log(cisDept);   // (출력값 ["Mike", "Clayton", "Terrill"])
+```
+배열에 요소를 추가하거나 배열의 요소를 제거하는 등 배열을 고치는 용도로 splice() 함수를 활용할 수 있다.
+
+### 2.4 변형자 함수
+자바스크립트는 개별적으로 요소를 건드리지 않고 배열 전체 내용을 고치는 여러 변형자 함수(mutator function)를 제공한다.  
+이들 함수를 잘 활용하면 어려운 문제도 쉽게 해결할 수 있다.
+
+#### 2.4.1 배열에 요소 추가하기
+push() 함수, unshift() 함수는 각각 배열에 요소를 추가하고, 배열의 요소를 제거하는 함수다.
+```js
+var nums = [1, 2, 3, 4, 5];
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+nums.push(6);
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5, 6])
+```
+length 프로퍼티를 이용해 배열을 확장하는 것보다 push() 함수를 이용하는 것이 더 직관적이다.  
+
+배열의 처음에 요소를 추가하는 것보다 배열의 끝에 요소를 추가하는 것이 쉽다.  
+배열의 처음에 요소를 추가할 때 변형자 함수가 없다면 배열에 있던 기존의 모든 요소를 한 칸씩 뒤로 이동 시킨 다음 새 데이터를 추가해야 한다.  
+```js
+var nums = [2, 3, 4, 5];
+var newnum = 1;
+var N = nums.length;
+for(var i = N; i >= 0; --i){
+    nums[i]  = nums[i-1];
+}
+nums[0] = newnum;
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+```
+
+unshift() 함수는 이런 고민을 간단하게 해결해준다.
+```js
+var nums = [2, 3, 4, 5];
+var newnum = 1
+nums.unshift(newnum);
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+
+nums = [3, 4, 5];
+nums.unshift(newnum, 2);
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+```
+unshift() 호출 코드는 한 번에 여려 요소를 배열 앞으로 추가할 수 있음을 알 수 있다.
+
+#### 2.4.2 배열의 요소 삭제하기
+pop() 변형자 함수를 이용하면 간단하게 배열의 **마지막 요소를 제거** 할 수 있다.
+```js
+var nums = [1, 2, 3, 4, 5, 9];
+nums.pop();
+
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+```
+배열의 앞 요소를 제거할 때 변형자 함수가 없다면 배열의 앞 요소를 제거한 다음 나머지 요소를 앞으로 이동시켜야 한다.  
+결국 배열 앞에 요소를 추가할 때와 마찬가지로 비효율적인 동작을 수행하게 한다.
+```js
+var nums = [9, 1, 2, 3, 4, 5];
+for(var i = 0; i < nums.length; ++i){
+    nums[i] = nums[i+1];
+}
+
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5, undefined])
+```
+제거된 요소의 자리를 채우느라 나머지 모든 요소를 이동시키고 나면 맨 끝에는 불필요한 값이 저장된다.  
+
+shift() 함수를 이용하면 간단히 배열의 맨 처음 요소를 제거할 수 있다.
+```js
+var nums = [9, 1, 2, 3, 4, 5];
+nums.shift();
+
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5])
+```
+배열의 끝에 불필요한 요소가 없어졌음을 알 수 있다.  
+pop() 함수, shift() 함수는 제거된 요소를 반환하므로 필요하다면 반환된 요소를 변수에 저장할 수 있다.
+```js
+var nums = [6, 1, 2, 3, 4, 5];
+var first = nums.shift();
+nums.push(first);
+
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5, 6])
+```
+
+#### 2.4.3 배열 중간에 요소를 추가하거나 배열의 중간에 있는 요소 삭제하기
+
+배열의 중간에 요소를 추가하거나 삭제할 때도 배열의 처음에 요소를 추가하거나 삭제할 때처럼 다른 요소를 이동시켜야 하는 문제가 생긴다.  
+`splice() 변형자 함수`를 이용하면 한번에 두 가지 동작을 수행할 수 있다.  
+
+**splice() 함수**
+- 시작 인덱스(어느 지점부터 요소를 추가할 것인지)
+- 삭제할 요소의 개수(요소를 추가할 때는 0)
+- 배열의 추가할 요소들
+
+```js
+var nums = [1, 2, 3, 7, 8, 9];
+var newElements = [4, 5, 6];
+nums.splice(3, 0, 4, 5, 6);
+console.log(nums);  // (출력값 [1, 2, 3, 4, 5, 6, 7, 8, 9])
+```
+
+#### 2.4.4 배열 요소 정렬하기
+**reverse() 함수**
+reverse() 함수는 배열의 요소를 역순으로 바꾼다.
+```js
+var nums = [1, 2, 3, 4, 5];
+nums.reverse();
+
+console.log(nums);  // (출력값 [5, 4, 3, 2, 1])
+```
+
+**sort() 함수**
+배열 요소를 순서대로 정렬할 때 사용한다.  
+특히 문자열을 정렬할 때 유용하다.
+```js
+var names = ['David', 'Mike', 'Cynthia', 'Clayton', 'Bryan'];
+names.sort();
+
+console.log(names); // (출력값 ["Bryan", "Clayton", "Cynthia", "David", "Mike"])
+```
+숫자는 생각대로 정렬되지 않는다.
+```js
+var nums = [3, 1, 2, 100, 4, 200];
+nums.sort();
+
+console.log(nums);  // (출력값 [1, 100, 2, 200, 3, 4])
+```
+sort() 함수는 배열 요소를 모두 문자열로 간주하고 알파벳순으로 요소르 정렬한다.  
+sort() 함수에 순서를 결정해주는 함수(ordering function)를 인자로 전달하면 sort() 함수는 인자로 전달된 함수를 이용해 숫자를 올바르게 정렬할 수 있다.  
+sort() 함수는 인자로 전달된 함수를 이용해 배열 요소 값이 올바른 순서로 정렬되었는지 검사한다.
+```js
+function compare( num1, num2 ){
+    return num1 - num2;
+}
+var nums = [3, 1, 2, 100, 4, 200];
+nums.sort(compare);
+
+console.log(nums);  // (출력값 [1, 2, 3, 4, 100, 200])
+```
+
+### 2.5 반복자 함수
+반복자 함수는 배열의 각 요소에 함수를 적용한 다음 그 결과 값 또는 값의 집합 또는 새로운 배열을 반환한다.
