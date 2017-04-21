@@ -363,12 +363,14 @@ var nums = [3, 1, 2, 100, 4, 200];
 nums.sort();
 
 console.log(nums);  // (출력값 [1, 100, 2, 200, 3, 4])
+//// ASCII 문자 순서로 정렬되어 숫자의 크기대로 나오지 않음
 ```
 sort() 함수는 배열 요소를 모두 문자열로 간주하고 알파벳순으로 요소르 정렬한다.  
 sort() 함수에 순서를 결정해주는 함수(ordering function)를 인자로 전달하면 sort() 함수는 인자로 전달된 함수를 이용해 숫자를 올바르게 정렬할 수 있다.  
 sort() 함수는 인자로 전달된 함수를 이용해 배열 요소 값이 올바른 순서로 정렬되었는지 검사한다.
 ```js
 function compare( num1, num2 ){
+    console.log(num1, num2)
     return num1 - num2;
 }
 var nums = [3, 1, 2, 100, 4, 200];
@@ -378,4 +380,196 @@ console.log(nums);  // (출력값 [1, 2, 3, 4, 100, 200])
 ```
 
 ### 2.5 반복자 함수
-반복자 함수는 배열의 각 요소에 함수를 적용한 다음 그 결과 값 또는 값의 집합 또는 새로운 배열을 반환한다.
+
+반복자 함수는 **배열의 각 요소에 함수를 적용한 다음 그 결과 값 또는 집합 또는 새로운 배열을 반환** 한다.
+
+#### 2.5.1 배열을 만들지 않는 반복자 함수
+**forEach() 함수**
+forEach() 함수는 배열의 모든 요소에 인자로 받은 함수를 호출한다.
+```js
+function square( num ){
+    console.log(num, num * num);
+}
+
+var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+nums.forEach(square);
+
+/*
+1 1
+2 4
+3 9
+4 16
+5 25
+6 36
+7 49
+8 64
+9 81
+10 100
+*/
+```
+**every() 함수**
+
+every() 함수는 불린 함수를 배열에 적용해 **배열의 모든 요소가 참** 이면 `true`를 반환한다.
+```js
+function isEven( num ){
+    return num % 2 == 0;
+}
+
+var nums = [2, 4, 6, 8, 10];
+var even = nums.every(isEven);
+if ( even ){
+    console.log('true');
+} else {
+    console.log('false');
+}
+
+// --------------------------
+
+var nums = [2, 3, 4, 6, 8];
+var even = nums.every(isEven);
+if ( even ){
+    console.log('true');
+} else {
+    console.log('false');
+}
+// (출력값 false)
+```
+
+**some() 함수**
+
+some() 함수는 배열 요소 중에 **한 요소라도 인자로 받은 불린 요소의 기준을 만족** 하면 `true`를 반환한다.
+
+```js
+function isEven( num ){
+    return num % 2 == 0;
+}
+
+var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var someEven = nums.some(isEven);
+if ( someEven ){
+    console.log('true');
+} else {
+    console.log('false');
+}
+// (출력값 true)
+
+// --------------------------
+
+var nums = [1, 3, 5, 7, 9];
+var someEven = nums.some(isEven);
+if ( someEven ){
+    console.log('true');
+} else {
+    console.log('false');
+}
+// (출력값 false)
+```
+
+**reduce() 함수**
+reduce() 함수는 누적자 함수를 인자로 받은 다음 배열의 모든 요소를 누적자 함수에 적용한다.
+```js
+function add(runningTotal, currentValue){
+    return runningTotal + currentValue;
+}
+
+var nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var sum = nums.reduce(add);
+
+console.log(sum);   // (출력값 55)
+```
+reduce() 함수를 이용해 문자열을 연결할 수도 있다.
+```js
+function concat(accumulatedString, item){
+    return accumulatedString + item;
+}
+
+var words = ['the ', 'quick ', 'brown ', 'fox '];
+var sentence = words.reduce(concat);
+
+console.log(sentence);  // (출력값 the quick brown fox)
+```
+
+reduceRight() 함수를 이용해 배열 요소의 순서를 뒤집을 수 있다.
+
+#### 2.5.2 새 배열을 반환하는 반복자 함수
+map() 함수, filter() 함수는 모두 새 배열을 반환하는 반복자 함수다.  
+map() 함수는 forEach() 함수처럼 배열의 각 요소에 함수를 적용하는 함수다.  
+
+**map() 함수**
+
+map() 함수는 배열 요소에 함수를 적용한 결과를 포함하는 **새 배열을 반환** 한다는 점이 다르다.
+```js
+function curve( grade ){
+    return grade += 5;
+}
+var grades = [1, 2, 3, 4, 5];
+var newgrades = grades.map(curve);
+console.log(grades);        // (출력값 (5) [1, 2, 3, 4, 5])
+console.log(newgrades);     // (출력값 (5) [6, 7, 8, 9, 10])
+
+//문자열에 map() 함수 사용
+function first( word ){
+    return word[0];
+}
+
+var words = ['for', 'your', 'information'];
+var acronym = words.map(first);
+console.log(acronym);           // (출력값 ["f", "y", "i"])
+console.log(acronym.join(""));  // (출력값 fyi)
+```
+**filter() 함수**
+filter() 함수는 every() 함수와 비슷하다.  
+다만 every() 함수처럼 배열의 모든 요소가 불린 함수를 만족할 때 true를 반환하는 것이 아니라, filter() 함수는 **불린 함수를 만족하는 요소를 포함하는 새로운 배열을 반환** 한다.
+```js
+function isEven ( num ) {
+    return num % 2 == 0;
+}
+
+function isOdd ( num ) {
+    return num % 2 != 0;
+}
+
+var num = [];
+for ( var i = 0; i < 20; ++i ){
+    nums[i] = i+1;
+}
+
+var evens = nums.filter(isEven);
+console.log(evens);     // (출력값 [2, 4, 6, 8, 10, 12, 14, 16, 18, 20])
+
+var odds = nums.filter(isOdd);
+console.log(odds);      // (출력값 [1, 3, 5, 7, 9, 11, 13, 15, 17, 19])
+```
+filter() 함수를 다음처럼 활용할 수 있다.
+```js
+function passing( num ){
+    return num >= 60;
+}
+
+var grades = [];
+for ( var i = 0; i < 10; ++i ){
+    grades[i] = Math.floor(Math.random() * 101);
+}
+
+var passGrades = grades.filter(passing);
+
+console.log(grades);    // (출력값 [11, 72, 87, 91, 61, 51, 25, 83, 32, 42])
+console.log(passGrades);// (출력값 [72, 87, 91, 61, 83])
+```
+
+### 2.6 이차원 배열과 다차원 배열
+자바스크립트는 기본적으로 일차원 배열만 지원한다.  
+하지만 배열의 배열을 이용해 다차원 배열을 만들수 있다.
+
+#### 2.6.1 이차원 배열 만들기
+이차원 배열은 행과 열을 가진 스프레드시트 같은 구조다.  
+이차원 배열을 만들려면 배열을 만든 다음 각 요소를 배열로 만들어야 한다.  
+최소한의 배열의 행 개수를 알아야 이차원 배열을 만들 수 있다.
+```js
+var twod = [];
+var rows = 5;
+for (var i = 0; i < rows; ++i){
+    twod[i] = [];
+}
+console.log(twod);  // (출력값 [Array(0), Array(0), Array(0), Array(0), Array(0)])
+```
